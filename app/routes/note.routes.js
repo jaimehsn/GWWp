@@ -1,21 +1,21 @@
 module.exports = app => {
-    const customers = require("../controllers/note.controller")
+    const notes = require("../controllers/note.controller")
 
     // Create a new Customer
-    app.post("/notes", customers.create)
+    app.post("/notes", notes.create)
 
     // Retrieve all Customers
-    app.get("/notes/:codeGrp", customers.findAll)
+    app.get("/notes/:codeGrp", notes.findAll)
 
     // Retrieve a single Customer with customerId
-    app.get("/notes/:noteId", customers.findOne)
+    app.get("/notes/:noteId", notes.findOne)
 
     // Update a Customer with customerId
-    app.put("/notes/:noteId", customers.update)
+    app.put("/notes/:noteId", notes.update)
 
     // Delete a Customer with customerId
-    app.delete("/notes/delOnes/:noteId", customers.delete)
+    app.delete("/notes/delOnes/:noteId", notes.delete)
 
     // Create a new Customer
-    app.delete("/notes/grpDel/:codeGrp", customers.deleteAll)
+    app.delete("/notes/grpDel/:codeGrp", notes.deleteAll)
 }

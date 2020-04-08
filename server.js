@@ -21,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // simple route
 require("./app/routes/customer.routes")(app);
 require("./app/routes/note.routes")(app);
+require("./app/routes/auth.routes")(app);
 
 
 // set port, listen for requests
