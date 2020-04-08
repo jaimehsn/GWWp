@@ -18,8 +18,23 @@ exports.authentication = (req, res) => {
                     message: "Server error"
                 })
             }
-        } else res.status(200).send({
-            message: "LOGIN!"
-        });
+        } else {
+            req.session.loggedin = true;
+            req.session.email = req.body.email;
+            res.status(200).send({ message: "Session STARTED successfully!" })
+        }
+    })
+}
+
+exports.logout = (req, res) => {
+    req.session.destroy((err) => {
+
+        if (err) {
+            res.status(500).send({
+                message: "Server error"
+            })
+        }
+
+        res.status(200).send({ message: "Session ENDED successfully!" })
     })
 }

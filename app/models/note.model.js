@@ -11,8 +11,8 @@ const Note = function(note) {
 Note.create = (newNote, result) => {
     sql.query("INSERT INTO notes (title,content,autor,codeGrp) VALUE (?, ?, ?, ?)", [newNote.title, newNote.content, newNote.autor, newNote.codeGrp], (err, res) => {
         if (err) {
-            console.log("error: ", err);
-            result(err, null);
+            console.log("Error: ", err);
+            result({ kind: "er_parameter_undefined" }, null);
             return;
         }
 

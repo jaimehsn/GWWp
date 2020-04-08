@@ -19,10 +19,14 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // simple route
-require("./app/routes/customer.routes")(app);
+require("./app/routes/user.routes")(app);
 require("./app/routes/note.routes")(app);
 require("./app/routes/auth.routes")(app);
 
+app.get("/sesion", (req, res) => {
+    res.send({ message: `${req.session.loggedin}` })
+})
+console.log("Sesión", session.log)
 
 // set port, listen for requests
 app.listen(9000, () => {

@@ -2,7 +2,13 @@ module.exports = app => {
     const notes = require("../controllers/note.controller")
 
     // Create a new Customer
-    app.post("/notes", notes.create)
+    app.post("/notes", (req, res) => {
+        if (req.session.loggedin) {
+            notes.create(req, res)
+        } else {
+            res.status(403).send({ message: `Unauthorized action` })
+        }
+    })
 
     // Retrieve all Customers
     app.get("/notes/:codeGrp", notes.findAll)

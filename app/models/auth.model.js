@@ -1,26 +1,8 @@
 const sql = require("./db");
 
 exports.authentication = (email, password, result) => {
-    //app.post('/auth', function(request, response) {
-    //var email = request.body.email;
-    //var password = request.body.password;
-    /*if (email && password) {
-        sql.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (error, results, fields) => {
-            if (results.length > 0) {
-                request.session.loggedin = true;
-                request.session.email = email;
-                result('LOGIN!', error);
-                return;
-            } else {
-                result('Incorrect Username and/or Password!', error);
-                return;
-            }
-        });
-    } else {
-        result('Please enter Username and Password!', error);
-    }*/
-    //});
-    sql.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (error, results, fields) => {
+
+    sql.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (error, results) => {
         if (error) {
             console.log("error:", error)
             result(error, null);
@@ -28,12 +10,32 @@ exports.authentication = (email, password, result) => {
         }
 
         if (results.length > 0) {
-            //request.session.loggedin = true;
-            //request.session.email = email;
             result(error, true);
             return;
         }
 
         result({ kind: "not_found" }, false);
     })
+}
+
+
+exports.encri = (email, password, result) => {}
+
+exports.exist = (email, result) => {
+    sql.query(`SELECT * FROM users WHERE email LIKE '${email}'`, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(err, email);
+            return;
+        }
+
+        if (res.length) {
+            console.log("found user: ", res[0]);
+            result(null, true);
+            return;
+        }
+
+        // not found Customer with the id
+        result(null, false);
+    });
 }

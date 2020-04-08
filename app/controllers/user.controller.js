@@ -1,4 +1,4 @@
-const Customer = require("../models/customer.model.js");
+const User = require("../models/user.model.js");
 
 // Create and Save a new Customer
 exports.create = (req, res) => {
@@ -10,25 +10,34 @@ exports.create = (req, res) => {
     }
 
     // Create a Customer
-    const customer = new Customer({
-        email: req.body.email,
+    const user = new User({
         name: req.body.name,
-        active: req.body.active
+        lastname: req.body.lastname,
+        email: req.body.email,
+        password: req.body.password,
+        phone: req.body.phone,
+        category: req.body.category
     });
 
     // Save Customer in the database
-    Customer.create(customer, (err, data) => {
+    User.create(user, (err, data) => {
         if (err)
-            res.status(500).send({
-                message: err.message || "Some error occurred while creating the Customer."
-            });
+            if (err.kind === "it_exists") {
+                res.status(400).send({
+                    message: "This email is already registered."
+                });
+            } else {
+                res.status(500).send({
+                    message: err.message || "Some error occurred while creating the Customer."
+                });
+            }
         else res.send(data);
     });
 };
 
 // Retrieve all Customers from the database.
 exports.findAll = (req, res) => {
-    Customer.getAll((err, data) => {
+    User.getAll((err, data) => {
         if (err)
             res.status(500).send({
                 message: err.message || "Some error occurred while retrieving customers."
@@ -39,15 +48,15 @@ exports.findAll = (req, res) => {
 
 // Find a single Customer with a customerId
 exports.findOne = (req, res) => {
-    Customer.findById(req.params.customerId, (err, data) => {
+    User.findByMail(req.params.userMail, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: `Not found Customer with id ${req.params.customerId}.`
+                    message: `Not found Customer with id ${req.params.userMail}.`
                 });
             } else {
                 res.status(500).send({
-                    message: "Error retrieving Customer with id " + req.params.customerId
+                    message: "Error retrieving Customer with id " + req.params.userMail
                 });
             }
         } else res.send(data);
@@ -63,45 +72,41 @@ exports.update = (req, res) => {
         });
     }
 
-    Customer.updateById(
-        req.params.customerId,
-        new Customer(req.body),
-        (err, data) => {
-            if (err) {
-                if (err.kind === "not_found") {
-                    res.status(404).send({
-                        message: `Not found Customer with id ${req.params.customerId}.`
-                    });
-                } else {
-                    res.status(500).send({
-                        message: "Error updating Customer with id " + req.params.customerId
-                    });
-                }
-            } else res.send(data);
-        }
-    );
+    User.updateByMail(req.params.userMail, new User(req.body), (err, data) => {
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                    message: `Not found User with Email ${req.params.userMail}.`
+                });
+            } else {
+                res.status(500).send({
+                    message: "Error updating User with Email " + req.params.userMail
+                });
+            }
+        } else res.send(data);
+    });
 };
 
 // Delete a Customer with the specified customerId in the request
 exports.delete = (req, res) => {
-    Customer.remove(req.params.customerId, (err, data) => {
+    User.remove(req.params.userMail, (err, data) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: `Not found Customer with id ${req.params.customerId}.`
+                    message: `Not found User with Email ${req.params.userMail}.`
                 });
             } else {
                 res.status(500).send({
-                    message: "Could not delete Customer with id " + req.params.customerId
+                    message: "Could not delete User with Email " + req.params.userMail
                 });
             }
-        } else res.send({ message: `Customer was deleted successfully!` });
+        } else res.send({ message: `User was deleted successfully!` });
     });
 };
 
 // Delete all Customers from the database.
 exports.deleteAll = (req, res) => {
-    Customer.removeAll((err, data) => {
+    User.removeAll((err, data) => {
         if (err)
             res.status(500).send({
                 message: err.message || "Some error occurred while removing all customers."

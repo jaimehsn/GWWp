@@ -7,24 +7,33 @@ exports.create = (req, res) => {
         res.status(400).send({
             message: "Content can not be empty!"
         })
+    } else {
+        // Create a Note
+        const note = new Note({
+            title: req.body.title,
+            content: req.body.content,
+            autor: req.body.autor,
+            codeGrp: req.body.codeGrp
+        })
+
+        // Save Note in the database
+        Note.create(note, (err, data) => {
+            if (err) {
+                if (err.kind === "er_parameter_undefined") {
+                    res.status(400).send({
+                        message: "Parameter error."
+                    })
+                } else {
+                    res.status(500).send({
+                        message: err.message || "Some error occurred while creating the Note."
+                    })
+                }
+
+            } else res.send(data)
+        })
     }
 
-    // Create a Note
-    const note = new Note({
-        title: req.body.title,
-        content: req.body.content,
-        autor: req.body.autor,
-        codeGrp: req.body.codeGrp
-    })
 
-    // Save Note in the database
-    Note.create(note, (err, data) => {
-        if (err)
-            res.status(500).send({
-                message: err.message || "Some error occurred while creating the Note."
-            })
-        else res.send(data)
-    })
 }
 
 // Retrieve all Note from the database.
