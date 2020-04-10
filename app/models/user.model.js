@@ -112,6 +112,7 @@ User.remove = (email, result) => {
         result(null, res);
     });
 };
+//Hola
 
 
 module.exports = User;
