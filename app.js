@@ -19,15 +19,18 @@ app.use(bodyParser.json())
 // parse requests of content-type: application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// simple route
-//require("./app/routes/user.routes")(app);
-//require("./app/routes/note.routes")(app);
-//require("./app/routes/auth.routes")(app);
-app.use('/api', api)
+//DB connection
+require("./app/models/orm.db")
+    // simple route
+    //require("./app/routes/user.routes")(app);
+    //require("./app/routes/note.routes")(app);
+    //require("./app/routes/auth.routes")(app);
+    //app.use('/api', api)
 
-app.get("/sesion", (req, res) => {
+/*app.get("/sesion", (req, res) => {
     res.send({ message: `${req.session.loggedin}` })
-})
+})*/
+require("./prueba")()
 
 
 module.exports = app
