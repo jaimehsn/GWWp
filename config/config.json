@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "prueba",
+    "password": "1234",
+    "database": "GWWp",
+    "host": "127.0.0.1",
+    "dialect": "mariadb",
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "prueba",
+    "password": null,
+    "database": "GWWp",
+    "host": "127.0.0.1",
+    "dialect": "mariadb",
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "prueba",
+    "password": null,
+    "database": "GWWp",
+    "host": "127.0.0.1",
+    "dialect": "mariadb",
+    "operatorsAliases": false
+  }
+}
