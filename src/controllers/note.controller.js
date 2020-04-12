@@ -1,36 +1,43 @@
 const Note = require("../models/note.model")
-
+const Sequelize = require("sequelize")
 // Create and Save a new Note
 exports.create = (req, res) => {
     // Validate request
-    if (Object.keys(req.body).length === 0) {
+    if (Object.keys(req.body).length != 4) {
         res.status(400).send({
-            message: "Content can not be empty!"
+            message: "Content can not be empty!",
+
         })
     } else {
         // Create a Note
-        const note = new Note({
+        Note.create({
             title: req.body.title,
             content: req.body.content,
             autor: req.body.autor,
-            codeGrp: req.body.codeGrp
+            codeGrp: req.body.codeGrp,
         })
-
-        // Save Note in the database
-        Note.create(note, (err, data) => {
-            if (err) {
-                if (err.kind === "er_parameter_undefined") {
-                    res.status(400).send({
-                        message: "Parameter error."
+            .then((note, created) => {
+                console.log(
+                    note.get({
+                        plain: true,
                     })
-                } else {
-                    res.status(500).send({
-                        message: err.message || "Some error occurred while creating the Note."
-                    })
+                );
+                console.log("Resultado de la insercion: ", created);
+                //
+                if (note) {
+                    res.status(200).send({
+                        message: "Create note OK.",
+                    });
                 }
+            })
+            .catch((err) => {
+                res.status(500).send({
+                    message: err.message || "Some error occurred while creating the Note.",
+                });
+            });
 
-            } else res.send(data)
-        })
+
+
     }
 
 
@@ -38,36 +45,23 @@ exports.create = (req, res) => {
 
 // Retrieve all Note from the database.
 exports.findAll = (req, res) => {
-    Note.getAll(req.params.codeGrp, (err, data) => {
-        if (err)
-            if (err.kind === "not_found") {
-                res.status(404).send({
-                    message: `Not found Notes with id ${req.params.codeGrp}.`
-                })
-            } else {
-                res.status(500).send({
-                    message: "Error retrieving Notes with id " + req.params.codeGrp
-                })
-            }
-        else res.send(data)
+    Note.findAll({
+        //SELECT name, lastname , email ...
+        attributes: ["id", "title", "content", "autor"],
+        where: {
+            codeGrp: req.params.codeGrp,
+        }
     })
-}
-
-// Find a single Note with a customerId
-exports.findOne = (req, res) => {
-    Note.findById(req.params.noteId, (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(404).send({
-                    message: `Not found Note with id ${req.params.noteId}.`
-                })
-            } else {
-                res.status(500).send({
-                    message: "Error retrieving Note with id " + req.params.noteId
-                })
-            }
-        } else res.send(data);
-    })
+        .then((notes) => {
+            //result of promis
+            console.log(notes);
+            res.status(200).send(notes);
+        })
+        //On case of err
+        .catch((err) => {
+            console.log("Error: ", err);
+            res.sendStatus(500);
+        });
 }
 
 // Update a Note identified by the noteId in the request
@@ -78,52 +72,103 @@ exports.update = (req, res) => {
             message: "Content can not be empty!"
         })
     }
-
-    Note.updateById(req.params.noteId, new Note(req.body), (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(404).send({
-                    message: `Not found Customer with id ${req.params.noteId}.`
-                })
+    Note.update(
+        {
+            //UPDATE name, lastname , email ...
+            //Parameters
+            title: req.body.title,
+            content: req.body.content,
+            autor: req.body.autor,
+            updatedAt: Sequelize.DATE,
+        },
+        {
+            where: {
+                id: req.params.noteId,
+            },
+        }
+    )
+        .then((notes) => {
+            //result of promis
+            console.log("LOG:", notes);
+            if (notes[0] == 0) {
+                res.status(200).send({
+                    message: `Not found Note with Id ${req.params.noteId}.`
+                });
             } else {
-                res.status(500).send({
-                    message: "Error updating Customer with id " + req.params.noteId
-                })
+                res.status(200).send({
+                    message: "Note update successful",
+                });
             }
-        } else res.send(data)
-    })
+        })
+        .catch((err) => {
+            //On case of err
+            console.log("Error: ", err);
+            res.status(500).send({
+                message: "Error updating Note with Id " + req.params.noteId,
+            });
+        });
 }
 
 // Delete a Note with the specified noteId in the request
 exports.delete = (req, res) => {
-    Note.remove(req.params.noteId, (err, data) => {
-        if (err) {
-            if (err.kind === "not_found") {
-                res.status(404).send({
-                    message: `Not found Note with id ${req.params.noteId}.`
-                })
+    Note.destroy(
+        {
+            //DELETE ...
+            where: {
+                id: req.params.noteId,
+            },
+        }
+    )
+        .then((notes) => {
+            //result of promis
+            console.log("LOG:", notes);
+            if (notes == 0) {
+                res.status(200).send({
+                    message: `Not found Note with Id ${req.params.noteId}.`
+                });
             } else {
-                res.status(500).send({
-                    message: "Could not delete Note with id " + req.params.noteId
-                })
+                res.status(200).send({
+                    message: "Note delete successful",
+                });
             }
-        } else res.send({ message: `Note was deleted successfully!` })
-    })
+        })
+        .catch((err) => {
+            //On case of err
+            console.log("Error: ", err);
+            res.status(500).send({
+                message: "Error deleting Note with Id " + req.params.noteId,
+            });
+        });
 }
 
 // Delete all Note from the group.
 exports.deleteAll = (req, res) => {
-    Note.removeAll(req.params.codeGrp, (err, data) => {
-        if (err)
-            if (err.kind === "not_found") {
-                res.status(404).send({
-                    message: `Not found Notes with codeGrp ${req.params.codeGrp}.`
-                })
+    Note.destroy(
+        {
+            //DELETE ...
+            where: {
+                codeGrp: req.params.codeGrp,
+            },
+        }
+    )
+        .then((notes) => {
+            //result of promis
+            console.log("LOG:", notes);
+            if (notes == 0) {
+                res.status(200).send({
+                    message: `Not found Notes with Code Group: ${req.params.codeGrp}.`
+                });
             } else {
-                res.status(500).send({
-                    message: "Could not delete Notes with codeGrp " + req.params.codeGrp
-                })
+                res.status(200).send({
+                    message: "Notes delete successful",
+                });
             }
-        else res.send({ message: `All Notes were deleted successfully!` })
-    })
+        })
+        .catch((err) => {
+            //On case of err
+            console.log("Error: ", err);
+            res.status(500).send({
+                message: "Error deleting Notes with Code Group: " + req.params.codeGrp,
+            });
+        });
 }

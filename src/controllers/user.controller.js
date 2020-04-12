@@ -4,7 +4,7 @@ const User = require("../models/user.model");
 // Create and Save a new Customer
 exports.create = (req, res) => {
     // Validate request
-    if (!req.body) {
+    if (Object.keys(req.body).length != 2) {
         res.status(400).send({
             message: "Content can not be empty!",
         });
@@ -160,16 +160,4 @@ exports.delete = (req, res) => {
                 message: "Error deleting User with Email " + req.params.userMail,
             });
         });
-};
-
-// Delete all Customers from the database.
-exports.deleteAll = (req, res) => {
-    User.removeAll((err, data) => {
-        if (err)
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while removing all customers.",
-            });
-        else res.send({ message: `All Customers were deleted successfully!` });
-    });
 };

@@ -25,19 +25,19 @@ api.post("/auth", auth.authentication)
 //Log Out 
 api.delete("/auth", auth.logout)
 
-api.post("/notes", (req, res) => {
+/*api.post("/notes", (req, res) => {
     if (req.session.loggedin) {
         notes.create(req, res)
     } else {
         res.status(403).send({ message: `Unauthorized action` })
     }
-})
+})*/
+
+//create a note
+api.post("/notes", notes.create)
 
 // Retrieve all Customers
 api.get("/notes/:codeGrp", notes.findAll)
-
-// Retrieve a single Customer with customerId
-api.get("/notes/:noteId", notes.findOne)
 
 // Update a Customer with customerId
 api.put("/notes/:noteId", notes.update)
