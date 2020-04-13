@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const User = require("../models/user.model");
+const bcrypt = require("bcrypt")
 
 // Create and Save a new Customer
 exports.create = (req, res) => {
@@ -9,34 +10,49 @@ exports.create = (req, res) => {
             message: "Content can not be empty!",
         });
     }
-
-    User.findOrCreate({
-        where: { email: req.body.email },
-        defaults: { password: req.body.password },
-    })
-        .then(([user, created]) => {
-            console.log(
-                user.get({
-                    plain: true,
-                })
-            );
-            console.log(created);
-            //
-            if (created) {
-                res.status(200).send({
-                    message: "Create user OK.",
-                });
-            } else {
-                res.status(400).send({
-                    message: "This email is already registered.",
-                });
-            }
-        })
-        .catch((err) => {
+    //Hash password to the DB
+    bcrypt.hash(req.body.password, 10, (err, passHash) => {
+        if(err){
+            console.log("Hash Error: ", err)
             res.status(500).send({
-                message: err.message || "Some error occurred while creating the User.",
+                message: err.message || "Hash Error!",
             });
-        });
+        }
+
+        console.log("Hash: " ,passHash)
+
+        //Insert User in DB
+        User.findOrCreate({
+            where: { email: req.body.email },
+            defaults: { password: passHash },
+        })
+            .then(([user, created]) => {
+                console.log(
+                    user.get({
+                        plain: true,
+                    })
+                );
+                console.log(created);
+                //
+                if (created) {
+                    res.status(200).send({
+                        message: "Create user OK.",
+                    });
+                } else {
+                    res.status(400).send({
+                        message: "This email is already registered.",
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+                res.status(500).send({
+                    message: err.message || "Some error occurred while creating the User.",
+                });
+            });
+    });
+
+    
 };
 
 // Retrieve all Customers from the database.
