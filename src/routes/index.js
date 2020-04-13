@@ -20,7 +20,7 @@ api.put("/users/:userMail", users.update)
 api.delete("/users/:userMail", users.delete)
 
 // Log In
-api.post("/auth", auth.authentication)
+api.post("/auth", auth.login)
 
 //Log Out 
 api.delete("/auth", auth.logout)

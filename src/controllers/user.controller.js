@@ -33,8 +33,8 @@ exports.create = (req, res) => {
                     })
                 );
                 console.log(created);
-                //
                 if (created) {
+                    console.log( "USER:",user)
                     res.status(200).send({
                         message: "Create user OK.",
                     });
