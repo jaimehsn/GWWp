@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken")
 const moment = require("moment")
 const config = require("../config/env.config")
 
+
 exports.createToken = (user) => {
     const payload = {
         sub: user.email,
@@ -13,3 +14,24 @@ exports.createToken = (user) => {
 
     return jwt.sign(payload, config.SECRET)
 }
+
+exports.autentication = (req, res, next) => {
+    const token = req.headers['access-token'];
+
+    if (token) {
+        jwt.verify(token, config.SECRET, (err, decoded) => {
+            if (err) {
+                return res.json({
+                    mensaje: 'Invalid token..',
+                });
+            } else {
+                req.decoded = decoded;
+                next();
+            }
+        });
+    } else {
+        res.send({
+            mensaje: 'Token required.'
+        });
+    }
+};

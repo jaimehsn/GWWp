@@ -3,14 +3,14 @@ const User = require("../models/user.model");
 const bcrypt = require("bcrypt")
 
 // Create and Save a new Customer
-exports.create = (req, res) => {
+exports.create = (req, res, next) => {
     // Validate request
     if (Object.keys(req.body).length != 2) {
         res.status(400).send({
             message: "Content can not be empty!",
         });
     }
-    //Hash password to the DB
+    //Hash password in to DB
     bcrypt.hash(req.body.password, 10, (err, passHash) => {
         if(err){
             console.log("Hash Error: ", err)
@@ -34,10 +34,9 @@ exports.create = (req, res) => {
                 );
                 console.log(created);
                 if (created) {
-                    console.log( "USER:",user)
-                    res.status(200).send({
-                        message: "Create user OK.",
-                    });
+                    console.log( "**USER CREATED**")
+                    //Login
+                    next()
                 } else {
                     res.status(400).send({
                         message: "This email is already registered.",
@@ -45,6 +44,7 @@ exports.create = (req, res) => {
                 }
             })
             .catch((err) => {
+                //Catch err in the query
                 console.log(err)
                 res.status(500).send({
                     message: err.message || "Some error occurred while creating the User.",
