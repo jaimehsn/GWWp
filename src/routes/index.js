@@ -23,17 +23,6 @@ api.delete("/users/:userMail", [service.autentication,users.delete])
 // Log In
 api.post("/auth", auth.login)
 
-//Log Out 
-api.delete("/auth", auth.logout)
-
-/*api.post("/notes", (req, res) => {
-    if (req.session.loggedin) {
-        notes.create(req, res)
-    } else {
-        res.status(403).send({ message: `Unauthorized action` })
-    }
-})*/
-
 //create a note
 api.post("/notes", [service.autentication,notes.create])
 

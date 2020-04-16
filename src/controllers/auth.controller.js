@@ -51,15 +51,3 @@ exports.login = (req, res) => {
 
 }
 
-exports.logout = (req, res) => {
-    req.session.destroy((err) => {
-
-        if (err) {
-            res.status(500).send({
-                message: "Server error"
-            })
-        }
-
-        res.status(200).send({ message: "Session ENDED successfully!" })
-    })
-}

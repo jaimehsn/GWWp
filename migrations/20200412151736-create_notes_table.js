@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("notes",{
+    return queryInterface.createTable("notes", {
       id: {
         type: Sequelize.INTEGER(11),
         allowNull: false,
@@ -24,11 +24,15 @@ module.exports = {
         type: Sequelize.INTEGER(11),
         allowNull: false,
       },
+      state: {
+        type: Sequelize.ENUM,
+        values: ['to do', 'in process', 'done', 'note']
+      },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      
+
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,

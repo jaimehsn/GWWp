@@ -12,14 +12,14 @@ exports.create = (req, res, next) => {
     }
     //Hash password in to DB
     bcrypt.hash(req.body.password, 10, (err, passHash) => {
-        if(err){
+        if (err) {
             console.log("Hash Error: ", err)
             res.status(500).send({
                 message: err.message || "Hash Error!",
             });
         }
 
-        console.log("Hash: " ,passHash)
+        console.log("Hash: ", passHash)
 
         //Insert User in DB
         User.findOrCreate({
@@ -34,7 +34,7 @@ exports.create = (req, res, next) => {
                 );
                 console.log(created);
                 if (created) {
-                    console.log( "**USER CREATED**")
+                    console.log("**USER CREATED**")
                     //Login
                     next()
                 } else {
@@ -52,7 +52,7 @@ exports.create = (req, res, next) => {
             });
     });
 
-    
+
 };
 
 // Retrieve all Customers from the database.
