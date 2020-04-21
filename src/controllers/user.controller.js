@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const User = require("../models/user.model");
+const User = require("../models/User");
 const bcrypt = require("bcrypt")
 
 // Create and Save a new Customer
@@ -160,7 +160,7 @@ exports.delete = (req, res) => {
             //result of promis
             console.log("LOG:", users);
             if (users == 0) {
-                res.status(200).send({
+                res.status(404).send({
                     message: `Not found User with Email ${req.params.userMail}.`
                 });
             } else {

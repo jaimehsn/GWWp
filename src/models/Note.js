@@ -1,5 +1,8 @@
 const Sequelize = require("sequelize");
 const db = require("./db");
+const Group = require("./Group")
+
+//Note model denitions
 
 const Note = db.define("note", {
     id: {
@@ -23,6 +26,7 @@ const Note = db.define("note", {
         type: Sequelize.INTEGER(10),
         allowNull: false,
     },
-});
+}, {});
+
 
 module.exports = Note;

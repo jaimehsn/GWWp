@@ -3,8 +3,11 @@ const api = express.Router()
 const users = require("../controllers/user.controller")
 const notes = require("../controllers/note.controller")
 const auth = require("../controllers/auth.controller")
+const groups = require("../controllers/group.controller")
 const service = require("../services")
 
+
+//-------------------------------------------------------------------------------------------
 // Register an user
 api.post("/users", [users.create, auth.login])
 
@@ -20,14 +23,16 @@ api.put("/users/:userMail", [service.autentication,users.update])
 // Delete a Customer with customerId
 api.delete("/users/:userMail", [service.autentication,users.delete])
 
+//-------------------------------------------------------------------------------------------
 // Log In
 api.post("/auth", auth.login)
 
+//-------------------------------------------------------------------------------------------
 //create a note
-api.post("/notes", [service.autentication,notes.create])
+api.post("/notes", [notes.create])
 
 // Retrieve all Customers
-api.get("/notes/:codeGrp", [service.autentication,notes.findAll])
+api.get("/notes/:nameGrp", [notes.findAll])
 
 // Update a Customer with customerId
 api.put("/notes/:noteId", [service.autentication,notes.update])
@@ -36,6 +41,19 @@ api.put("/notes/:noteId", [service.autentication,notes.update])
 api.delete("/notes/delOnes/:noteId", [service.autentication,notes.delete])
 
 // Create a new Customer
-api.delete("/notes/grpDel/:codeGrp", [service.autentication,notes.deleteAll])
+api.delete("/notes/grpDel", [notes.deleteAll])
+
+//-------------------------------------------------------------------------------------------
+//Get group notes
+api.get("/groups", groups.findAll)
+
+//Create group
+api.post("/groups", groups.create)
+
+//update group
+api.put("/groups", groups.update)
+
+//Delete a group
+api.delete("/groups", groups.delete)
 
 module.exports = api

@@ -1,4 +1,5 @@
-const Note = require("../models/note.model")
+const Note = require("../models/Note")
+const Group = require("../models/Group")
 const Sequelize = require("sequelize")
 // Create and Save a new Note
 exports.create = (req, res) => {
@@ -6,7 +7,6 @@ exports.create = (req, res) => {
     if (Object.keys(req.body).length != 4) {
         res.status(400).send({
             message: "Content can not be empty!",
-
         })
     } else {
         // Create a Note
@@ -35,17 +35,35 @@ exports.create = (req, res) => {
                     message: err.message || "Some error occurred while creating the Note.",
                 });
             });
-
-
-
     }
-
-
 }
 
 // Retrieve all Note from the database.
 exports.findAll = (req, res) => {
-    Note.findAll({
+    Group.findAll({
+        //SELECT name, lastname , email ...
+        attributes: ["name"],
+        where: {
+            name: req.params.nameGrp,
+        },
+        include: [{
+            model: Note,
+            as: "NotesModel",
+            attributes: ["title", "content"],
+        }]
+    })
+        .then((data) => {
+            //result of promis
+            console.log(data);
+            res.status(200).send(data);
+        })
+        //On case of err
+        .catch((err) => {
+            console.log("Error: ", err);
+            res.sendStatus(500);
+        });
+
+    /*Note.findAll({
         //SELECT name, lastname , email ...
         attributes: ["id", "title", "content", "autor"],
         where: {
@@ -61,7 +79,7 @@ exports.findAll = (req, res) => {
         .catch((err) => {
             console.log("Error: ", err);
             res.sendStatus(500);
-        });
+        });*/
 }
 
 // Update a Note identified by the noteId in the request
@@ -147,7 +165,7 @@ exports.deleteAll = (req, res) => {
         {
             //DELETE ...
             where: {
-                codeGrp: req.params.codeGrp,
+                codeGrp: req.body.codeGrp,
             },
         }
     )
@@ -156,7 +174,7 @@ exports.deleteAll = (req, res) => {
             console.log("LOG:", notes);
             if (notes == 0) {
                 res.status(200).send({
-                    message: `Not found Notes with Code Group: ${req.params.codeGrp}.`
+                    message: `Not found Notes with Code Group: ${req.body.codeGrp}.`
                 });
             } else {
                 res.status(200).send({
@@ -168,7 +186,7 @@ exports.deleteAll = (req, res) => {
             //On case of err
             console.log("Error: ", err);
             res.status(500).send({
-                message: "Error deleting Notes with Code Group: " + req.params.codeGrp,
+                message: "Error deleting Notes with Code Group: " + req.body.codeGrp,
             });
         });
 }

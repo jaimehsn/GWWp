@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const db = require("./db");
+const Note = require("./Note")
 
 //Sequelize group model
 const Group = db.define("group", {
@@ -14,5 +15,8 @@ const Group = db.define("group", {
         allowNull: false,
     },
 });
+
+
+
 
 module.exports = Group;
