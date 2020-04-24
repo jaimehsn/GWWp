@@ -4,12 +4,13 @@ const users = require("../controllers/user.controller")
 const notes = require("../controllers/note.controller")
 const auth = require("../controllers/auth.controller")
 const groups = require("../controllers/group.controller")
+const users_groups = require("../controllers/users_groups.controller")
 const service = require("../services")
 
 
 //-------------------------------------------------------------------------------------------
 // Register an user
-api.post("/users", [users.create, auth.login])
+api.post("/users", [users.create/*, auth.login*/])
 
 // Retrieve all Customers
 api.get("/users", [service.autentication,users.findAll])
@@ -56,4 +57,10 @@ api.put("/groups", groups.update)
 //Delete a group
 api.delete("/groups", groups.delete)
 
+//-------------------------------------------------------------------------------------------
+//Add user into group
+api.post("/add", users_groups.addToGroup)
+//list user of a group
+api.get("/listUsers", users_groups.findAllUsersOfGroup)
+api.get("/listGroups", users_groups.findAllGroupsOfUser)
 module.exports = api

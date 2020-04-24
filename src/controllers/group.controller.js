@@ -18,9 +18,9 @@ Note.belongsTo(Group, {
 exports.findAll = (req, res) => {
     Group.findAll({
         //SELECT name, lastname , email ...
-        attributes: ["id"],
+        attributes: [],
         where: {
-            id: req.body.id,
+            name: req.body.name,
         },
         include: [{
             model: Note,

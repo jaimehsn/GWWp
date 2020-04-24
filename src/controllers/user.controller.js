@@ -28,14 +28,15 @@ exports.create = (req, res, next) => {
         })
             .then(([user, created]) => {
                 console.log(
-                    user.get({
-                        plain: true,
-                    })
+                    user.email
                 );
                 console.log(created);
                 if (created) {
                     console.log("**USER CREATED**")
                     //Login
+                    res.status(200).send({
+                        message: "**USER CREATED**",//********************QUITAR LA RES PARA EL NEXT()********************
+                    });
                     next()
                 } else {
                     res.status(400).send({
