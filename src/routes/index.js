@@ -36,10 +36,10 @@ api.post("/notes", [notes.create])
 api.get("/notes/:nameGrp", [notes.findAll])
 
 // Update a Customer with customerId
-api.put("/notes/:noteId", [service.autentication,notes.update])
+api.put("/notes/:noteId", [/*service.autentication,*/notes.update])
 
 // Delete a Customer with customerId
-api.delete("/notes/delOnes/:noteId", [service.autentication,notes.delete])
+api.delete("/notes/delOnes/:noteId", [/*service.autentication,*/notes.delete])
 
 // Create a new Customer
 api.delete("/notes/grpDel", [notes.deleteAll])

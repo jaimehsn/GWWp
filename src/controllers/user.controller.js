@@ -7,7 +7,7 @@ exports.create = (req, res, next) => {
     // Validate request
     if (Object.keys(req.body).length != 2) {
         res.status(400).send({
-            message: "Content can not be empty!",
+            message: "Bad query!",
         });
     }
     //Hash password in to DB

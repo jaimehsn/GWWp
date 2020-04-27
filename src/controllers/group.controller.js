@@ -16,6 +16,13 @@ Note.belongsTo(Group, {
 
 //Show all notes of group
 exports.findAll = (req, res) => {
+    //It is verified that the request contains the necessary fields
+    if (Object.keys(req.body).length != 1) {
+        res.status(400).send({
+            message: "Bad query!",
+        });
+    } 
+
     Group.findAll({
         //SELECT name, lastname , email ...
         attributes: [],
@@ -43,10 +50,10 @@ exports.findAll = (req, res) => {
 
 // Create and Save a new Customer
 exports.create = (req, res) => {
-    // Validate request
+    ////It is verified that the request contains the necessary fields
     if (Object.keys(req.body).length != 1) {
         res.status(400).send({
-            message: "Content can not be empty!",
+            message: "Bad query!",
         });
     }
 
@@ -84,10 +91,10 @@ exports.create = (req, res) => {
 
 // Update name group
 exports.update = (req, res) => {
-    // Validate Request
+    ////It is verified that the request contains the necessary fields
     if (Object.keys(req.body).length != 2) {
         res.status(400).send({
-            message: "Content can not be empty!",
+            message: "Bad query!",
         });
     }
 
@@ -129,6 +136,14 @@ exports.update = (req, res) => {
 
 //DELETE group
 exports.delete = (req, res) => {
+    
+    //It is verified that the request contains the necessary fields
+    if (Object.keys(req.body).length != 1) {
+        res.status(400).send({
+            message: "Bad query!",
+        });
+    }
+
     Group.destroy(
         {
             //DELETE ...

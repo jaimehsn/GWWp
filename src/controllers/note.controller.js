@@ -6,7 +6,7 @@ exports.create = (req, res) => {
     // Validate request
     if (Object.keys(req.body).length != 4) {
         res.status(400).send({
-            message: "Content can not be empty!",
+            message: "Bad query!",
         })
     } else {
         // Create a Note
@@ -40,6 +40,13 @@ exports.create = (req, res) => {
 
 // Retrieve all Note from the database.
 exports.findAll = (req, res) => {
+    //It is verified that the request contains the necessary fields
+    if (Object.keys(req.body).length != 1) {
+        res.status(400).send({
+            message: "Bad query!",
+        });
+    }
+
     Group.findAll({
         //SELECT name, lastname , email ...
         attributes: ["name"],
@@ -62,33 +69,15 @@ exports.findAll = (req, res) => {
             console.log("Error: ", err);
             res.sendStatus(500);
         });
-
-    /*Note.findAll({
-        //SELECT name, lastname , email ...
-        attributes: ["id", "title", "content", "autor"],
-        where: {
-            codeGrp: req.params.codeGrp,
-        }
-    })
-        .then((notes) => {
-            //result of promis
-            console.log(notes);
-            res.status(200).send(notes);
-        })
-        //On case of err
-        .catch((err) => {
-            console.log("Error: ", err);
-            res.sendStatus(500);
-        });*/
 }
 
 // Update a Note identified by the noteId in the request
 exports.update = (req, res) => {
-    // Validate Request
-    if (!req.body) {
+    //It is verified that the request contains the necessary fields
+    if (Object.keys(req.body).length != 3) {
         res.status(400).send({
-            message: "Content can not be empty!"
-        })
+            message: "Bad query!",
+        });
     }
     Note.update(
         {
@@ -155,38 +144,6 @@ exports.delete = (req, res) => {
             console.log("Error: ", err);
             res.status(500).send({
                 message: "Error deleting Note with Id " + req.params.noteId,
-            });
-        });
-}
-
-// Delete all Note from the group.
-exports.deleteAll = (req, res) => {
-    Note.destroy(
-        {
-            //DELETE ...
-            where: {
-                codeGrp: req.body.codeGrp,
-            },
-        }
-    )
-        .then((notes) => {
-            //result of promis
-            console.log("LOG:", notes);
-            if (notes == 0) {
-                res.status(200).send({
-                    message: `Not found Notes with Code Group: ${req.body.codeGrp}.`
-                });
-            } else {
-                res.status(200).send({
-                    message: "Notes delete successful",
-                });
-            }
-        })
-        .catch((err) => {
-            //On case of err
-            console.log("Error: ", err);
-            res.status(500).send({
-                message: "Error deleting Notes with Code Group: " + req.body.codeGrp,
             });
         });
 }
