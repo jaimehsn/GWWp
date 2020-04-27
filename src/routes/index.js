@@ -22,7 +22,7 @@ api.get("/users/:userMail", [service.autentication,users.findOne])
 api.put("/users/:userMail", [service.autentication,users.update])
 
 // Delete a Customer with customerId
-api.delete("/users/:userMail", [service.autentication,users.delete])
+api.delete("/users/:userMail", [/*service.autentication,*/users.delete])
 
 //-------------------------------------------------------------------------------------------
 // Log In
@@ -40,9 +40,6 @@ api.put("/notes/:noteId", [/*service.autentication,*/notes.update])
 
 // Delete a Customer with customerId
 api.delete("/notes/delOnes/:noteId", [/*service.autentication,*/notes.delete])
-
-// Create a new Customer
-api.delete("/notes/grpDel", [notes.deleteAll])
 
 //-------------------------------------------------------------------------------------------
 //Get group notes
