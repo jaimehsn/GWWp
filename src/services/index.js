@@ -26,6 +26,7 @@ exports.autentication = (req, res, next) => {
                 });
             } else {
                 req.decoded = decoded;
+                console.log("TOKEN DECODE: ", decoded.sub)
                 next();
             }
         });

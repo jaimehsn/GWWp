@@ -1,8 +1,20 @@
 const Sequelize = require("sequelize")
 const Group = require("../models/Group");
 const Note = require("../models/Note")
+const Users_group = require("../models/Users_group")
+const User = require("../models/User")
 
 //Associations
+User.hasMany(Users_group, {
+    as: "user_group_Model",
+    foreignKey: 'id_user',
+});
+Users_group.belongsTo(User, {
+    as: "user__Model",
+    foreignKey: 'id_user',
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+});
 Group.hasMany(Note, {
     as: "NotesModel",
     foreignKey: "codeGrp",
@@ -13,6 +25,16 @@ Note.belongsTo(Group, {
     onDelete: 'cascade',
     onUpdate: 'cascade',
 })
+Group.hasMany(Users_group, {
+    as: "user_groupModel",
+    foreignKey: 'id_group',
+});
+Users_group.belongsTo(Group, {
+    as: "group_Model",
+    foreignKey: 'id_group',
+    onDelete: 'cascade',
+    onUpdate: 'cascade',
+});
 
 //Show all notes of group
 exports.findAll = (req, res) => {
@@ -143,8 +165,68 @@ exports.delete = (req, res) => {
             message: "Bad query!",
         });
     }
+    Users_group.findOne({
+        //who is the group administrator is checked
+        attributes: ["admin", "id_user"],
+        include: [{
+            model: Group,
+            as: "group_Model",
+            attributes:[],
+            where:{ name: req.body.name}
+        },{
+            model: User,
+            as: "user__Model",
+            attributes:[],
+            where:{ email: req.decoded.sub}
+        }]
+    })
+        .then((data) => {
+            //and then the group is removed
+            console.log(data);
+            if(data.dataValues.admin){
+                Group.destroy(
+                    {
+                        //DELETE ...
+                        where: {
+                            name: req.body.name,
+                        },
+                        include: [{ model: Note, as: "NotesModel" }]
+                    }
+                )
+                    .then((groups) => {
+                        //result of promis
+                        console.log("LOG:", groups);
+                        if (groups == 0) {
+                            res.status(404).send({
+                                message: `Not found Group with name ${req.body.name}.`
+                            });
+                        } else {
+                            res.status(200).send({
+                                message: "Group delete successful",
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        //On case of err
+                        console.log("Error: ", err);
+                        res.status(500).send({
+                            message: "Error deleting User with Group " + req.body.name,
+                        });
+                    });
+            }else{
+                res.status(401).send({
+                    message: "You do not have authorization on this group"
+                });
+            }
+        })
+        //On case of err
+        .catch((err) => {
+            console.log("Error: ", err);
+            res.sendStatus(500);
+        });
 
-    Group.destroy(
+
+    /*Group.destroy(
         {
             //DELETE ...
             where: {
@@ -172,5 +254,5 @@ exports.delete = (req, res) => {
             res.status(500).send({
                 message: "Error deleting User with Group " + req.body.name,
             });
-        });
+        });*/
 };

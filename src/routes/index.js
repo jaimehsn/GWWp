@@ -10,19 +10,19 @@ const service = require("../services")
 
 //-------------------------------------------------------------------------------------------
 // Register an user
-api.post("/users", [users.create/*, auth.login*/])
+api.post("/users", [users.create, auth.login])
 
 // Retrieve all Customers
-api.get("/users", [service.autentication,users.findAll])
+api.get("/users", [service.autentication, users.findAll])
 
 // Retrieve a single Customer with customerId
-api.get("/users/:userMail", [service.autentication,users.findOne])
+api.get("/users/:userMail", [service.autentication, users.findOne])
 
 // Update a Customer with customerId
-api.put("/users/:userMail", [service.autentication,users.update])
+api.put("/users/:userMail", [service.autentication, users.update])
 
 // Delete a Customer with customerId
-api.delete("/users/:userMail", [/*service.autentication,*/users.delete])
+api.delete("/users/:userMail", [service.autentication,users.delete])
 
 //-------------------------------------------------------------------------------------------
 // Log In
@@ -30,34 +30,34 @@ api.post("/auth", auth.login)
 
 //-------------------------------------------------------------------------------------------
 //create a note
-api.post("/notes", [notes.create])
+api.post("/notes", [service.autentication,notes.create])
 
 // Retrieve all Customers
-api.get("/notes/:nameGrp", [notes.findAll])
+api.get("/notes/:nameGrp", [service.autentication,notes.findAll])
 
 // Update a Customer with customerId
-api.put("/notes/:noteId", [/*service.autentication,*/notes.update])
+api.put("/notes/:noteId", [service.autentication,notes.update])
 
 // Delete a Customer with customerId
-api.delete("/notes/delOnes/:noteId", [/*service.autentication,*/notes.delete])
+api.delete("/notes/delOnes/:noteId", [service.autentication,notes.delete])
 
 //-------------------------------------------------------------------------------------------
 //Get group notes
-api.get("/groups", groups.findAll)
+api.get("/groups", [service.autentication, groups.findAll])
 
 //Create group
-api.post("/groups", groups.create)
+api.post("/groups", [service.autentication, groups.create])
 
 //update group
-api.put("/groups", groups.update)
+api.put("/groups", [service.autentication, groups.update])
 
 //Delete a group
-api.delete("/groups", groups.delete)
+api.delete("/groups", [service.autentication, groups.delete])
 
 //-------------------------------------------------------------------------------------------
 //Add user into group
-api.post("/add", users_groups.addToGroup)
+api.post("/add", [service.autentication,users_groups.addToGroup])
 //list user of a group
-api.get("/listUsers", users_groups.findAllUsersOfGroup)
-api.get("/listGroups", users_groups.findAllGroupsOfUser)
+api.get("/listUsers", [service.autentication,users_groups.findAllUsersOfGroup])
+api.get("/listGroups", [service.autentication,users_groups.findAllGroupsOfUser])
 module.exports = api
