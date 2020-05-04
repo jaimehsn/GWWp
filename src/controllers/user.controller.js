@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt")
 // Create and Save a new Customer
 exports.create = (req, res, next) => {
     // Validate request
+    console.log("REQ:",req.body)
     if (Object.keys(req.body).length != 2) {
         res.status(400).send({
             message: "Bad query!",

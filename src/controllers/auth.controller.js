@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const service = require("../services")
 
 exports.login = (req, res) => {
-
+    console.log("REQ:",req.body)
     const user = {
         email: req.body.email,
         password: req.body.password,
