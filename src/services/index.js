@@ -16,8 +16,8 @@ exports.createToken = (user) => {
 }
 
 exports.autentication = (req, res, next) => {
-    const token = req.headers['access-token'];
-
+    const token = req.headers['authorization'];
+    console.log("token recibido",req.headers)
     if (token) {
         jwt.verify(token, config.SECRET, (err, decoded) => {
             if (err) {
@@ -27,6 +27,7 @@ exports.autentication = (req, res, next) => {
             } else {
                 req.decoded = decoded;
                 console.log("TOKEN DECODE: ", decoded.sub)
+                req.decodeEmail = decoded.sub
                 next();
             }
         });

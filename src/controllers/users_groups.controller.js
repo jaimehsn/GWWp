@@ -147,7 +147,7 @@ exports.findAllGroupsOfUser = (req, res) => {
         //SELECT name, lastname , email ...
         attributes: ["id"],
         where: {
-            email: req.body.email,
+            email: req.decodeEmail,
         }
     })
         .then(([users]) => {
