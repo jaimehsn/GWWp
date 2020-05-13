@@ -3,20 +3,23 @@ const db = require("./db");
 
 //Sequelize user_grops FK model
 
-  const Users_group = db.define("users_group", {
-    id_user: {
-      type: Sequelize.INTEGER(11),
-      allowNull: false,
-      primaryKey: true,
-    },
-    id_group: {
-        type: Sequelize.INTEGER(11),
-        allowNull: false,
-        primaryKey: true,
-      },
-    
-  });
-  
+const Users_group = db.define("users_group", {
+  id_user: {
+    type: Sequelize.INTEGER(11),
+    allowNull: false,
+    primaryKey: true,
+  },
+  id_group: {
+    type: Sequelize.INTEGER(11),
+    allowNull: false,
+    primaryKey: true,
+  },
+  admin: {
+    type: Sequelize.TINYINT(1),
+    allowNull: false,
+  },
+});
+
 module.exports = Users_group
 
 

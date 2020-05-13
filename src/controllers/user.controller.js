@@ -76,7 +76,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     User.findAll({
         //SELECT name, lastname , email ...
-        attributes: ["name", "lastname", "email"],
+        attributes: ["name", "lastname", "email", "phone" , "category"],
         where: {
             email: [req.params.userMail],
         },
@@ -85,7 +85,7 @@ exports.findOne = (req, res) => {
             //result of promis
             console.log(users);
             if (users.length == 0) {
-                res.status(200).send("Non-existent user");
+                res.status(404).send("Non-existent user");
             } else {
                 res.status(200).send(users);
             }

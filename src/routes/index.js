@@ -46,7 +46,7 @@ api.delete("/notes/delOnes/:noteId", [service.autentication,notes.delete])
 api.get("/groups", [service.autentication, groups.findAll])
 
 //Create group
-api.post("/groups", [service.autentication, groups.create])
+api.post("/groups", [/*service.autentication,*/ groups.create])
 
 //update group
 api.put("/groups", [service.autentication, groups.update])
@@ -56,7 +56,7 @@ api.delete("/groups", [service.autentication, groups.delete])
 
 //-------------------------------------------------------------------------------------------
 //Add user into group
-api.post("/add", [service.autentication,users_groups.addToGroup])
+api.post("/add", [/*service.autentication,*/users_groups.addToGroup])
 //list user of a group
 api.get("/listUsers", [service.autentication,users_groups.findAllUsersOfGroup])
 api.get("/listGroups", [service.autentication,users_groups.findAllGroupsOfUser])
