@@ -83,7 +83,7 @@ exports.findOne = (req, res) => {
     })
         .then((users) => {
             //result of promis
-            console.log(users);
+            //console.log(users);
             if (users.length == 0) {
                 res.status(404).send("Non-existent user");
             } else {
@@ -112,7 +112,6 @@ exports.update = (req, res) => {
             //Parameters
             name: req.body.name,
             lastname: req.body.lastname,
-            password: req.body.password,
             phone: req.body.phone,
             category: req.body.category,
             updatedAt: Sequelize.DATE,
