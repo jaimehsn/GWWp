@@ -17,6 +17,7 @@ exports.createToken = (user) => {
 
 exports.autentication = (req, res, next) => {
     const token = req.headers['authorization'];
+    
     console.log("token recibido",req.headers)
     if (token) {
         jwt.verify(token, config.SECRET, (err, decoded) => {

@@ -27,6 +27,9 @@ Users_group.belongsTo(Group, {
 
 //ADD user in to a group
 exports.addToGroup = (req, res) => {
+    if(!req.permisos){
+        req.permisos = 0
+    }
     User.findAll({
         //The user id is consulted
         attributes: ["id"],
@@ -59,6 +62,7 @@ exports.addToGroup = (req, res) => {
                         defaults: {
                             id_user: var_id_user,
                             id_group: var_id_group,
+                            admin: req.permisos,
                         }
                     })
                         .then(([add, created]) => {

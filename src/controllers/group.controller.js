@@ -71,9 +71,9 @@ exports.findAll = (req, res) => {
 
 
 // Create and Save a new Customer
-exports.create = (req, res) => {
+exports.create = (req, res, next) => {
     ////It is verified that the request contains the necessary fields
-    if (Object.keys(req.body).length != 1) {
+    if (Object.keys(req.body).length < 1) {
         res.status(400).send({
             message: "Bad query!",
         });
@@ -81,8 +81,8 @@ exports.create = (req, res) => {
 
     //Insert User in DB
     Group.findOrCreate({
-        where: { name: req.body.name },
-        defaults: { name: req.body.name },
+        where: { name: req.body.grpName },
+        defaults: { name: req.body.grpName },
     })
         .then(([group, created]) => {
             console.log(
@@ -93,9 +93,11 @@ exports.create = (req, res) => {
             console.log(created);
             if (created) {
                 console.log("**GROUP CREATED**")
-                res.status(200).send({
+                req.pormisos = 1
+                next()
+                /*res.status(200).send({
                     message: "Group created.",
-                });
+                });*/
             } else {
                 res.status(400).send({
                     message: "This Name is already registered.",
