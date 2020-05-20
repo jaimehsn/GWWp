@@ -4,36 +4,53 @@ const Sequelize = require("sequelize")
 // Create and Save a new Note
 exports.create = (req, res) => {
     // Validate request
-    if (Object.keys(req.body).length != 4) {
+    if (Object.keys(req.body).length != 5) {
         res.status(400).send({
             message: "Bad query!",
         })
     } else {
         // Create a Note
-        Note.create({
-            title: req.body.title,
-            content: req.body.content,
-            autor: req.body.autor,
-            codeGrp: req.body.codeGrp,
+        Group.findOne({
+            //SELECT name, lastname , email ...
+            attributes: ["id"],
+            where: {
+                name: req.body.nameGrp,
+            },
         })
-            .then((note, created) => {
-                console.log(
-                    note.get({
-                        plain: true,
+            .then((data) => {
+                //result of promis
+                //console.log(data.id);
+                Note.create({
+                    title: req.body.title,
+                    content: req.body.content,
+                    autor: req.body.autor,
+                    state: req.body.state,
+                    codeGrp: data.id,
+                })
+                    .then((note, created) => {
+                        console.log(
+                            note.get({
+                                plain: true,
+                            })
+                        );
+                        console.log("Resultado de la insercion: ", created);
+                        //
+                        if (note) {
+                            res.status(200).send({
+                                message: "Create note OK.",
+                            });
+                        }
                     })
-                );
-                console.log("Resultado de la insercion: ", created);
-                //
-                if (note) {
-                    res.status(200).send({
-                        message: "Create note OK.",
+                    .catch((err) => {
+                        res.status(500).send({
+                            message: err.message || "Some error occurred while creating the Note.",
+                        });
                     });
-                }
             })
+            //On case of err
             .catch((err) => {
-                res.status(500).send({
-                    message: err.message || "Some error occurred while creating the Note.",
-                });
+                console.log("Error: ", err);
+                res.sendStatus(500);
             });
     }
 }
@@ -41,7 +58,7 @@ exports.create = (req, res) => {
 // Retrieve all Note from the database.
 exports.findAll = (req, res) => {
     //It is verified that the request contains the necessary fields
-    if (Object.keys(req.body).length != 1) {
+    if (Object.keys(req.params).length != 1) {
         res.status(400).send({
             message: "Bad query!",
         });
@@ -56,7 +73,7 @@ exports.findAll = (req, res) => {
         include: [{
             model: Note,
             as: "NotesModel",
-            attributes: ["title", "content"],
+            attributes: ["title", "content", "autor","state"],
         }]
     })
         .then((data) => {

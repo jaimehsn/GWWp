@@ -160,7 +160,7 @@ exports.findAllGroupsOfUser = (req, res) => {
             const var_id_user = users.id
             Users_group.findAll({
                 //SELECT name, lastname , email ...
-                attributes: [],
+                attributes: ["admin"],
                 include: [{
                     model: Group,
                     as: "groupModel",
