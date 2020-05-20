@@ -8,7 +8,11 @@ const users_groups = require("../controllers/users_groups.controller")
 const service = require("../services")
 
 
+// Log In
+api.post("/auth", auth.login)
+
 //-------------------------------------------------------------------------------------------
+
 // Register an user
 api.post("/users", [users.create, auth.login])
 
@@ -25,10 +29,7 @@ api.put("/users/:userMail", [service.autentication, users.update])
 api.delete("/users/:userMail", [service.autentication,users.delete])
 
 //-------------------------------------------------------------------------------------------
-// Log In
-api.post("/auth", auth.login)
 
-//-------------------------------------------------------------------------------------------
 //create a note
 api.post("/notes", [service.autentication,notes.create])
 
@@ -42,6 +43,7 @@ api.put("/notes/:noteId", [service.autentication,notes.update])
 api.delete("/notes/delOnes/:noteId", [service.autentication,notes.delete])
 
 //-------------------------------------------------------------------------------------------
+
 //Get group notes
 api.get("/groups", [service.autentication, groups.findAll])
 
@@ -55,8 +57,10 @@ api.put("/groups", [service.autentication, groups.update])
 api.delete("/groups", [service.autentication, groups.delete])
 
 //-------------------------------------------------------------------------------------------
+
 //Add user into group
 api.post("/add", [service.autentication,users_groups.addToGroup])
+api.delete("/del", [users_groups.delFromGroup])
 //list user of a group
 api.get("/listUsers", [service.autentication,users_groups.findAllUsersOfGroup])
 api.get("/listGroups", [service.autentication,users_groups.findAllGroupsOfUser])

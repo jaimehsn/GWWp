@@ -102,6 +102,75 @@ exports.addToGroup = (req, res) => {
         });
 }
 
+exports.delFromGroup = (req, res) => {
+    if(!req.permisos){
+        req.permisos = 0
+    }
+    User.findAll({
+        //The user id is consulted
+        attributes: ["id"],
+        where: {
+            email: req.body.email
+        }
+    })
+        .then(([users]) => {
+            //result of promiss
+            const var_id_user = users.id
+
+            Group.findAll({
+                //SELECT name, lastname , email ...
+                attributes: ["id"],
+                where: {
+                    name: req.body.grpName
+                }
+            })
+                .then(([groups]) => {
+                    //result of promiss
+                    const var_id_group = groups.id
+                    console.log("Variable id user:", var_id_user,
+                        "\nVariable id groupo:", var_id_group);
+                    //insert query
+                    Users_group.destroy({
+                        where: {
+                            id_user: var_id_user,
+                            id_group: var_id_group,
+                        },
+                    })
+                        .then((del) => {
+                            console.log(del);
+                            if (del == 0) {
+                                res.status(404).send({
+                                    message: `Error 404`
+                                });
+                            } else {
+                                res.status(200).send({
+                                    message: "***USER DEL***",
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            //Catch err in the query
+                            console.log(err)
+                            res.status(500).send({
+                                message: err.message || "Some error occurred while adding the User.",
+                            });
+                        });
+
+                })
+                //On case of err
+                .catch((err) => {
+                    console.log("Error: ", err);
+                    res.sendStatus(500);
+                });
+
+        })
+        //On case of err
+        .catch((err) => {
+            console.log("Error: ", err);
+            res.sendStatus(500);
+        });
+}
+
 //list users of a group
 exports.findAllUsersOfGroup = (req, res) => {
     Group.findAll({
