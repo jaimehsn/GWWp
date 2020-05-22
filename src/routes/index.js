@@ -26,21 +26,21 @@ api.get("/users/:userMail", [service.autentication, users.findOne])
 api.put("/users/:userMail", [service.autentication, users.update])
 
 // Delete a Customer with customerId
-api.delete("/users/:userMail", [service.autentication,users.delete])
+api.delete("/users/:userMail", [service.autentication, users.delete])
 
 //-------------------------------------------------------------------------------------------
 
 //create a note
-api.post("/notes", [service.autentication,notes.create])
+api.post("/notes", [service.autentication, notes.create])
 
 // Retrieve all Customers
-api.get("/notes/:nameGrp", [service.autentication,notes.findAll])
+api.get("/notes/:nameGrp", [service.autentication, notes.findAll])
 
 // Update a Customer with customerId
-api.put("/notes/:noteId", [service.autentication,notes.update])
+api.put("/notes/:noteId", [service.autentication, notes.update])
 
 // Delete a Customer with customerId
-api.delete("/notes/delOnes/:noteId", [service.autentication,notes.delete])
+api.delete("/notes/delOnes/:noteId", [service.autentication, notes.delete])
 
 //-------------------------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ api.delete("/notes/delOnes/:noteId", [service.autentication,notes.delete])
 api.get("/groups", [service.autentication, groups.findAll])
 
 //Create group
-api.post("/groups", [service.autentication, groups.create , users_groups.addToGroup])
+api.post("/groups", [service.autentication, groups.create, users_groups.addToGroup])
 
 //update group
 api.put("/groups", [service.autentication, groups.update])
@@ -59,9 +59,15 @@ api.delete("/groups", [service.autentication, groups.delete])
 //-------------------------------------------------------------------------------------------
 
 //Add user into group
-api.post("/add", [service.autentication,users_groups.addToGroup])
-api.delete("/del", [users_groups.delFromGroup])
+api.post("/add", [service.autentication, users_groups.addToGroup])
+//Delete user fron a group
+api.delete("/del", [service.autentication, users_groups.delFromGroup])
 //list user of a group
-api.get("/listUsers", [service.autentication,users_groups.findAllUsersOfGroup])
-api.get("/listGroups", [service.autentication,users_groups.findAllGroupsOfUser])
+api.get("/listUsers", [service.autentication, users_groups.findAllUsersOfGroup])
+//List groups of a users
+api.get("/listGroups", [service.autentication, users_groups.findAllGroupsOfUser])
+
+//-------------------------------------------------------------------------------------------
+
+//Export routes
 module.exports = api

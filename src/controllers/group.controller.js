@@ -43,7 +43,7 @@ exports.findAll = (req, res) => {
         res.status(400).send({
             message: "Bad query!",
         });
-    } 
+    }
 
     Group.findAll({
         //SELECT name, lastname , email ...
@@ -54,7 +54,7 @@ exports.findAll = (req, res) => {
         include: [{
             model: Note,
             as: "NotesModel",
-            attributes:["title","content"],
+            attributes: ["title", "content"],
         }]
     })
         .then((group) => {
@@ -78,7 +78,7 @@ exports.create = (req, res, next) => {
             message: "Bad query!",
         });
     }
-
+    console.log("NOMBRE DEL GRUPO:", req.body.grpName)
     //Insert User in DB
     Group.findOrCreate({
         where: { name: req.body.grpName },
@@ -93,7 +93,7 @@ exports.create = (req, res, next) => {
             console.log(created);
             if (created) {
                 console.log("**GROUP CREATED**")
-                req.pormisos = 1
+                req.permisos = 1
                 next()
                 /*res.status(200).send({
                     message: "Group created.",
@@ -160,9 +160,9 @@ exports.update = (req, res) => {
 
 //DELETE group
 exports.delete = (req, res) => {
-    
+
     //It is verified that the request contains the necessary fields
-    if (Object.keys(req.body).length != 1) {
+    if (Object.keys(req.body).length < 1) {
         res.status(400).send({
             message: "Bad query!",
         });
@@ -173,24 +173,24 @@ exports.delete = (req, res) => {
         include: [{
             model: Group,
             as: "group_Model",
-            attributes:[],
-            where:{ name: req.body.name}
-        },{
+            attributes: [],
+            where: { name: req.body.grpName }
+        }, {
             model: User,
             as: "user__Model",
-            attributes:[],
-            where:{ email: req.decoded.sub}
+            attributes: [],
+            where: { email: req.decoded.sub }
         }]
     })
         .then((data) => {
             //and then the group is removed
             console.log(data);
-            if(data.dataValues.admin){
+            if (data.dataValues.admin) {
                 Group.destroy(
                     {
                         //DELETE ...
                         where: {
-                            name: req.body.name,
+                            name: req.body.grpName,
                         },
                         include: [{ model: Note, as: "NotesModel" }]
                     }
@@ -200,7 +200,7 @@ exports.delete = (req, res) => {
                         console.log("LOG:", groups);
                         if (groups == 0) {
                             res.status(404).send({
-                                message: `Not found Group with name ${req.body.name}.`
+                                message: `Not found Group with name ${req.body.grpName}.`
                             });
                         } else {
                             res.status(200).send({
@@ -212,10 +212,10 @@ exports.delete = (req, res) => {
                         //On case of err
                         console.log("Error: ", err);
                         res.status(500).send({
-                            message: "Error deleting User with Group " + req.body.name,
+                            message: "Error deleting User with Group " + req.body.grpName,
                         });
                     });
-            }else{
+            } else {
                 res.status(401).send({
                     message: "You do not have authorization on this group"
                 });
@@ -228,33 +228,4 @@ exports.delete = (req, res) => {
         });
 
 
-    /*Group.destroy(
-        {
-            //DELETE ...
-            where: {
-                name: req.body.name,
-            },
-            include: [{ model: Note, as: "NotesModel" }]
-        }
-    )
-        .then((groups) => {
-            //result of promis
-            console.log("LOG:", groups);
-            if (groups == 0) {
-                res.status(404).send({
-                    message: `Not found Group with name ${req.body.name}.`
-                });
-            } else {
-                res.status(200).send({
-                    message: "Group delete successful",
-                });
-            }
-        })
-        .catch((err) => {
-            //On case of err
-            console.log("Error: ", err);
-            res.status(500).send({
-                message: "Error deleting User with Group " + req.body.name,
-            });
-        });*/
 };

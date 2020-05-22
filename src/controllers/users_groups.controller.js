@@ -3,7 +3,7 @@ const User = require("../models/User")
 const Group = require("../models/Group")
 const Users_group = require("../models/Users_group")
 
-//Assosiation
+//Assosiations
 User.hasMany(Users_group, {
     as: "usergroupModel",
     foreignKey: 'id_user',
@@ -34,12 +34,17 @@ exports.addToGroup = (req, res) => {
         //The user id is consulted
         attributes: ["id"],
         where: {
-            email: req.body.email
+            email: req.body.email 
         }
     })
         .then(([users]) => {
             //result of promiss
             const var_id_user = users.id
+            if(users.length == 0){
+                res.status(404).send({
+                    message: "User not found.",
+                });
+            }
 
             Group.findAll({
                 //SELECT name, lastname , email ...
@@ -98,7 +103,9 @@ exports.addToGroup = (req, res) => {
         //On case of err
         .catch((err) => {
             console.log("Error: ", err);
-            res.sendStatus(500);
+            res.sendStatus(500).send({
+                message: err.message || "ERROR PRUEBA.",
+            });
         });
 }
 
