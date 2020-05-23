@@ -90,7 +90,7 @@ exports.create = (req, res, next) => {
                     plain: true,
                 })
             );
-            console.log(created);
+            console.log("CONSOLE LOG DEL CREATE GROUP:",group);
             if (created) {
                 console.log("**GROUP CREATED**")
                 req.permisos = 1

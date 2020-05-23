@@ -62,7 +62,8 @@ exports.findAll = (req, res) => {
         res.status(400).send({
             message: "Bad query!",
         });
-    }
+    }   
+    console.log("FUNCION DE OBTENER NOTAS")
 
     Group.findAll({
         //SELECT name, lastname , email ...

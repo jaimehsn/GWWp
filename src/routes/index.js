@@ -60,10 +60,13 @@ api.delete("/groups", [service.autentication, groups.delete])
 
 //Add user into group
 api.post("/add", [service.autentication, users_groups.addToGroup])
+
 //Delete user fron a group
 api.delete("/del", [service.autentication, users_groups.delFromGroup])
+
 //list user of a group
 api.get("/listUsers", [service.autentication, users_groups.findAllUsersOfGroup])
+
 //List groups of a users
 api.get("/listGroups", [service.autentication, users_groups.findAllGroupsOfUser])
 

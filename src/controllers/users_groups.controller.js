@@ -30,11 +30,15 @@ exports.addToGroup = (req, res) => {
     if(!req.permisos){
         req.permisos = 0
     }
+    if(!req.body.email){
+        req.body.email = req.decoded.sub
+    }
+
     User.findAll({
         //The user id is consulted
         attributes: ["id"],
         where: {
-            email: req.body.email 
+            email: req.body.email
         }
     })
         .then(([users]) => {
@@ -71,7 +75,7 @@ exports.addToGroup = (req, res) => {
                         }
                     })
                         .then(([add, created]) => {
-                            console.log(add);
+                            console.log("CONSOLE ADD: ",created);
                             if (created) {
                                 console.log("**USER ADD**")
                                 //
@@ -87,9 +91,14 @@ exports.addToGroup = (req, res) => {
                         .catch((err) => {
                             //Catch err in the query
                             console.log(err)
-                            res.status(500).send({
-                                message: err.message || "Some error occurred while adding the User.",
-                            });
+                            if(err != ERR_HTTP_HEADERS_SENT){
+                                res.status(500).send({
+                                    message: err.message || "Some error occurred while adding the User.",
+                                });
+                            }else{
+                                console.log("*********ERROR DE CABECERAS*********")
+                            }
+                            
                         });
 
                 })
@@ -184,7 +193,7 @@ exports.findAllUsersOfGroup = (req, res) => {
         //SELECT name, lastname , email ...
         attributes: ["id"],
         where: {
-            name: req.body.name,
+            name: req.query.grpName,
         }
     })
         .then(([group]) => {

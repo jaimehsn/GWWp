@@ -17,7 +17,8 @@ exports.createToken = (user) => {
 
 exports.autentication = (req, res, next) => {
     const token = req.headers['authorization'];
-    
+    console.log("NOMBRE DEL GRUPO PARAMETRO: ", req.params)
+    console.log("NOMBRE DEL GRUPO QUERY: ", req.query.grpName)
     console.log("token recibido",req.headers)
     if (token) {
         jwt.verify(token, config.SECRET, (err, decoded) => {
