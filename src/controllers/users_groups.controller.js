@@ -60,8 +60,6 @@ exports.addToGroup = (req, res) => {
                 .then(([groups]) => {
                     //result of promiss
                     const var_id_group = groups.id
-                    console.log("Variable id user:", var_id_user,
-                        "\nVariable id groupo:", var_id_group);
                     //insert query
                     Users_group.findOrCreate({
                         where: {
