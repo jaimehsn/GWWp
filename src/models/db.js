@@ -5,6 +5,7 @@ const dbConfig = require("../config/db.config.js");
 module.exports = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     host: dbConfig.HOST,
     dialect: dbConfig.DIALECT,
+    port: dbConfig.PORT,
     operatorAliases: false,
     pool: {
         max: 5,

@@ -33,7 +33,7 @@ exports.addToGroup = (req, res) => {
     if(!req.body.email){
         req.body.email = req.decoded.sub
     }
-
+    
     User.findAll({
         //The user id is consulted
         attributes: ["id"],
@@ -43,68 +43,70 @@ exports.addToGroup = (req, res) => {
     })
         .then(([users]) => {
             //result of promiss
-            const var_id_user = users.id
-            if(users.length == 0){
+            console.log("LLEGA AQUÍ: ", users)
+            if(!users){
                 res.status(404).send({
                     message: "User not found.",
                 });
-            }
-
-            Group.findAll({
-                //SELECT name, lastname , email ...
-                attributes: ["id"],
-                where: {
-                    name: req.body.grpName
-                }
-            })
-                .then(([groups]) => {
-                    //result of promiss
-                    const var_id_group = groups.id
-                    //insert query
-                    Users_group.findOrCreate({
-                        where: {
-                            id_user: var_id_user,
-                            id_group: var_id_group,
-                        },
-                        defaults: {
-                            id_user: var_id_user,
-                            id_group: var_id_group,
-                            admin: req.permisos,
-                        }
-                    })
-                        .then(([add, created]) => {
-                            console.log("CONSOLE ADD: ",created);
-                            if (created) {
-                                console.log("**USER ADD**")
-                                //
-                                res.status(200).send({
-                                    message: "**USER ADD**",
-                                });
-                            } else {
-                                res.status(400).send({
-                                    message: "That User already be on this group.",
-                                });
+            }else{
+                const var_id_user = users.id
+                Group.findAll({
+                    //SELECT name, lastname , email ...
+                    attributes: ["id"],
+                    where: {
+                        name: req.body.grpName
+                    }
+                })
+                    .then(([groups]) => {
+                        //result of promiss
+                        const var_id_group = groups.id
+                        //insert query
+                        Users_group.findOrCreate({
+                            where: {
+                                id_user: var_id_user,
+                                id_group: var_id_group,
+                            },
+                            defaults: {
+                                id_user: var_id_user,
+                                id_group: var_id_group,
+                                admin: req.permisos,
                             }
                         })
-                        .catch((err) => {
-                            //Catch err in the query
-                            console.log(err)
-                            if(err != ERR_HTTP_HEADERS_SENT){
-                                res.status(500).send({
-                                    message: err.message || "Some error occurred while adding the User.",
-                                });
-                            }else{
-                                console.log("*********ERROR DE CABECERAS*********")
-                            }
-                            
-                        });
-
-                })
-                //On case of err
-                .catch((err) => {
-                    console.log("Error: ", err);
-                    res.sendStatus(500);
-                });
+                            .then(([add, created]) => {
+                                console.log("CONSOLE ADD: ",created);
+                                if (created) {
+                                    console.log("**USER ADD**")
+                                    //
+                                    res.status(200).send({
+                                        message: "**USER ADD**",
+                                    });
+                                } else {
+                                    res.status(400).send({
+                                        message: "That User already be on this group.",
+                                    });
+                                }
+                            })
+                            .catch((err) => {
+                                //Catch err in the query
+                                console.log(err)
+                                if(err != ERR_HTTP_HEADERS_SENT){
+                                    res.status(500).send({
+                                        message: err.message || "Some error occurred while adding the User.",
+                                    });
+                                }else{
+                                    console.log("*********ERROR DE CABECERAS*********")
+                                }
+                                
+                            });
+    
+                    })
+                    //On case of err
+                    .catch((err) => {
+                        console.log("Error: ", err);
+                        res.sendStatus(500);
+                    });
+            }
+            
 
         })
         //On case of err
