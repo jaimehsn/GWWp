@@ -74,7 +74,7 @@ exports.findAll = (req, res) => {
         include: [{
             model: Note,
             as: "NotesModel",
-            attributes: ["title", "content", "autor","state"],
+            attributes: ["title", "content", "autor","state", "id"],
         }]
     })
         .then((data) => {
