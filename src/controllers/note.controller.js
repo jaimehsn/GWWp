@@ -14,7 +14,7 @@ exports.create = (req, res) => {
             //SELECT name, lastname , email ...
             attributes: ["id"],
             where: {
-                name: req.body.nameGrp,
+                name: req.body.grpName,
             },
         })
             .then((data) => {
@@ -103,6 +103,7 @@ exports.update = (req, res) => {
             //Parameters
             title: req.body.title,
             content: req.body.content,
+            state: req.body.state,
             autor: req.body.autor,
             updatedAt: Sequelize.DATE,
         },

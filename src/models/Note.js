@@ -21,6 +21,10 @@ const Note = db.define("note", {
         type: Sequelize.STRING(40),
         allowNull: false,
     },
+    state:{
+        type: Sequelize.ENUM(['to do','done','in process','note']),
+        allowNull:false
+    },
     codeGrp: {
         type: Sequelize.INTEGER(10),
         allowNull: false,
