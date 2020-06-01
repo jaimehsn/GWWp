@@ -6,7 +6,6 @@ const connect = require("./src/models/db");
 connect.authenticate()
   .then(() => {
     console.log("Database connected...");
-    console.log(process.env.MARIADB_URI)
     // set port, listen for requests
     app.listen(9000, () => {
       console.log("Server is running on port 9000.");
