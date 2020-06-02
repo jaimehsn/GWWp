@@ -92,7 +92,7 @@ exports.findAll = (req, res) => {
 // Update a Note identified by the noteId in the request
 exports.update = (req, res) => {
     //It is verified that the request contains the necessary fields
-    if (Object.keys(req.body).length != 3) {
+    if (Object.keys(req.body).length != 4) {
         res.status(400).send({
             message: "Bad query!",
         });
