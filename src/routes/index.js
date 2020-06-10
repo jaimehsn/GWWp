@@ -16,9 +16,6 @@ api.post("/auth", auth.login)
 // Register an user
 api.post("/users", [users.create, auth.login])
 
-// Retrieve all Customers
-api.get("/users", [service.autentication, users.findAll])
-
 // Retrieve a single Customer with customerId
 api.get("/users/:userMail", [service.autentication, users.findOne])
 

@@ -13,8 +13,8 @@ connect.authenticate()
       key: fs.readFileSync('./src/ssl/key.pem'),
       cert: fs.readFileSync('./src/ssl/cert.pem'),
       passphrase: 'L0sm0nt3sn0t13n3n0j0s'
-    }, app).listen(9000, () => {
-      console.log("Server is running on port 9000.");
+    }, app).listen(443, () => {
+      console.log("Server is running on port 443.");
     });
   })
   .catch((err) => {

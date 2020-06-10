@@ -54,24 +54,6 @@ exports.create = (req, res, next) => {
 
 };
 
-// Retrieve all Customers from the database.
-exports.findAll = (req, res) => {
-    User.findAll({
-        //SELECT name, lastname , email ...
-        attributes: ["name", "lastname", "email"],
-    })
-        .then((users) => {
-            //result of promis
-            console.log(users);
-            res.status(200).send(users);
-        })
-        //On case of err
-        .catch((err) => {
-            console.log("Error: ", err);
-            res.sendStatus(500);
-        });
-};
-
 // Find a single Customer with a customerId
 exports.findOne = (req, res) => {
     User.findAll({
