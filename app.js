@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 });
 
 
-app.use(morgan('combined'))
+app.use(morgan('tiny'))
 
 app.use(session({
     secret: 'secret',

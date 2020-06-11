@@ -5,7 +5,6 @@ const bcrypt = require("bcrypt")
 // Create and Save a new Customer
 exports.create = (req, res, next) => {
     // Validate request
-    console.log("REQ:",req.body)
     if (Object.keys(req.body).length != 2) {
         res.status(400).send({
             message: "Bad query!",
@@ -14,13 +13,11 @@ exports.create = (req, res, next) => {
     //Hash password in to DB
     bcrypt.hash(req.body.password, 10, (err, passHash) => {
         if (err) {
-            console.log("Hash Error: ", err)
+            console.log("HASH ERROR: ", err)
             res.status(500).send({
                 message: err.message || "Hash Error!",
             });
         }
-
-        console.log("Hash: ", passHash)
 
         //Insert User in DB
         User.findOrCreate({
@@ -28,15 +25,12 @@ exports.create = (req, res, next) => {
             defaults: { password: passHash },
         })
             .then(([user, created]) => {
-                console.log(
-                    user.email
-                );
-                console.log(created);
                 if (created) {
-                    console.log("**USER CREATED**")
+                    console.log("****USER CREATED****")
                     //Login
                     next()
                 } else {
+                    console.log("****EXISTING USER****")
                     res.status(400).send({
                         message: "This email is already registered.",
                     });
@@ -85,8 +79,10 @@ exports.findOne = (req, res) => {
             //result of promis
             //console.log(users);
             if (users.length == 0) {
+                console.log("****USER NOT FOUND****")
                 res.status(404).send("Non-existent user");
             } else {
+                console.log("****USER FOUND****")
                 res.status(200).send(users);
             }
         })
@@ -101,6 +97,7 @@ exports.findOne = (req, res) => {
 exports.update = (req, res) => {
     // Validate Request
     if (!req.body) {
+        console.log("****BAD REQUEST****")
         res.status(400).send({
             message: "Content can not be empty!",
         });
@@ -124,12 +121,14 @@ exports.update = (req, res) => {
     )
         .then((users) => {
             //result of promis
-            console.log("LOG:", users);
+            
             if (users[0] == 0) {
-                res.status(200).send({
+                console.log("****USER NOT FOUND****");
+                res.status(404).send({
                     message: `Not found User with Email ${req.params.userMail}.`
                 });
             } else {
+                console.log("****UPDATED USER****");
                 res.status(200).send({
                     message: "User update successful",
                 });
@@ -156,12 +155,13 @@ exports.delete = (req, res) => {
     )
         .then((users) => {
             //result of promis
-            console.log("LOG:", users);
             if (users == 0) {
+                console.log("****USER NOT FOUND****");
                 res.status(404).send({
                     message: `Not found User with Email ${req.params.userMail}.`
                 });
             } else {
+                console.log("****USER DELETED****");
                 res.status(200).send({
                     message: "User delete successful",
                 });

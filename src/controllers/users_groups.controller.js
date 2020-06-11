@@ -43,8 +43,9 @@ exports.addToGroup = (req, res) => {
     })
         .then(([users]) => {
             //result of promiss
-            console.log("LLEGA AQUÍ: ", users)
+            
             if(!users){
+                console.log("****USER NOT FOUND****")
                 res.status(404).send({
                     message: "User not found.",
                 });
@@ -73,14 +74,14 @@ exports.addToGroup = (req, res) => {
                             }
                         })
                             .then(([add, created]) => {
-                                console.log("CONSOLE ADD: ",created);
                                 if (created) {
-                                    console.log("**USER ADD**")
+                                    console.log("****ADDED USER****")
                                     //
                                     res.status(200).send({
-                                        message: "**USER ADD**",
+                                        message: "Added user.",
                                     });
                                 } else {
+                                    console.log("****ADDED USER****")
                                     res.status(400).send({
                                         message: "That User already be on this group.",
                                     });
@@ -94,7 +95,7 @@ exports.addToGroup = (req, res) => {
                                         message: err.message || "Some error occurred while adding the User.",
                                     });
                                 }else{
-                                    console.log("*********ERROR DE CABECERAS*********")
+                                    console.log("****HEADERS ERROR****")
                                 }
                                 
                             });
@@ -143,8 +144,6 @@ exports.delFromGroup = (req, res) => {
                 .then(([groups]) => {
                     //result of promiss
                     const var_id_group = groups.id
-                    console.log("Variable id user:", var_id_user,
-                        "\nVariable id groupo:", var_id_group);
                     //insert query
                     Users_group.destroy({
                         where: {
@@ -153,20 +152,21 @@ exports.delFromGroup = (req, res) => {
                         },
                     })
                         .then((del) => {
-                            console.log(del);
                             if (del == 0) {
+                                console.log("****USER NOT FOUND****")
                                 res.status(404).send({
                                     message: `Error 404`
                                 });
                             } else {
+                                console.log("****DELETED USER****")
                                 res.status(200).send({
-                                    message: "***USER DEL***",
+                                    message: "Deleted user.",
                                 });
                             }
                         })
                         .catch((err) => {
                             //Catch err in the query
-                            console.log(err)
+                            console.log("Error: ",err)
                             res.status(500).send({
                                 message: err.message || "Some error occurred while adding the User.",
                             });
@@ -198,7 +198,6 @@ exports.findAllUsersOfGroup = (req, res) => {
     })
         .then(([group]) => {
             //result of promis
-            console.log(group.id);
             const var_id_group = group.id
             Users_group.findAll({
                 //SELECT name, lastname , email ...
@@ -214,6 +213,7 @@ exports.findAllUsersOfGroup = (req, res) => {
                 .then((users) => {
                     //result of promis
                     //console.log(users);
+                    console.log("****FOUND USERS****");
                     res.status(200).send(users);
                     
                 })
@@ -241,7 +241,6 @@ exports.findAllGroupsOfUser = (req, res) => {
     })
         .then(([users]) => {
             //result of promis
-            console.log(users.id);
             const var_id_user = users.id
             Users_group.findAll({
                 //SELECT name, lastname , email ...
@@ -256,6 +255,7 @@ exports.findAllGroupsOfUser = (req, res) => {
                 .then((groups) => {
                     //result of promis
                     //console.log(users);
+                    console.log("****GROUPS FOUND****");
                     res.status(200).send(groups);
                     
                 })

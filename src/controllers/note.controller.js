@@ -33,9 +33,9 @@ exports.create = (req, res) => {
                                 plain: true,
                             })
                         );
-                        console.log("Resultado de la insercion: ", created);
                         //
                         if (note) {
+                            console.log("****CREATED NOTE****");
                             res.status(200).send({
                                 message: "Create note OK.",
                             });
@@ -57,13 +57,13 @@ exports.create = (req, res) => {
 
 // Retrieve all Note from the database.
 exports.findAll = (req, res) => {
+
     //It is verified that the request contains the necessary fields
     if (Object.keys(req.params).length != 1) {
         res.status(400).send({
             message: "Bad query!",
         });
     }   
-    console.log("FUNCION DE OBTENER NOTAS")
 
     Group.findAll({
         //SELECT name, lastname , email ...
@@ -79,7 +79,7 @@ exports.findAll = (req, res) => {
     })
         .then((data) => {
             //result of promis
-            console.log(data);
+            console.log("****NOTES FOUND****")
             res.status(200).send(data);
         })
         //On case of err
@@ -93,6 +93,7 @@ exports.findAll = (req, res) => {
 exports.update = (req, res) => {
     //It is verified that the request contains the necessary fields
     if (Object.keys(req.body).length != 4) {
+        console.log("****BAD REQUEST****")
         res.status(400).send({
             message: "Bad query!",
         });
@@ -115,12 +116,13 @@ exports.update = (req, res) => {
     )
         .then((notes) => {
             //result of promis
-            console.log("LOG:", notes);
             if (notes[0] == 0) {
+                console.log("****NOTES NOT FOUND****")
                 res.status(200).send({
                     message: `Not found Note with Id ${req.params.noteId}.`
                 });
             } else {
+                console.log("****UPDATED NOTE****")
                 res.status(200).send({
                     message: "Note update successful",
                 });
@@ -147,12 +149,14 @@ exports.delete = (req, res) => {
     )
         .then((notes) => {
             //result of promis
-            console.log("LOG:", notes);
+            
             if (notes == 0) {
-                res.status(200).send({
+                console.log("****NOTES NOT FOUND****");
+                res.status(404).send({
                     message: `Not found Note with Id ${req.params.noteId}.`
                 });
             } else {
+                console.log("****REMOVED NOTE****");
                 res.status(200).send({
                     message: "Note delete successful",
                 });

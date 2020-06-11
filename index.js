@@ -11,9 +11,9 @@ const io = require("socket.io")(https)
 
 io.on('connection', (socket) => {
   console.log('**************USUARIO CONECTADO SOCKET**************');
-  socket.on('emit_method', (data) => {
-    io.emit('prueba', data);
-    console.log("DATOS RECIBIDOS DEL SOCKET: ", data);
+  socket.on('update-note', (data) => {
+    io.emit(data.group, data);
+    console.log("DATOS RECIBIDOS DEL SOCKET: ", data.group);
   });
   socket.on('disconnect', () => {
     console.log('**************USUARIO DESCONECTADO SOCKET**************');

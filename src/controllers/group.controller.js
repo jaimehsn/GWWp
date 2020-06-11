@@ -59,7 +59,7 @@ exports.findAll = (req, res) => {
     })
         .then((group) => {
             //result of promis
-            console.log(group);
+            console.log("****GROUPS FOUND SATISFACTORILY****");
             res.status(200).send(group);
         })
         //On case of err
@@ -78,7 +78,6 @@ exports.create = (req, res, next) => {
             message: "Bad query!",
         });
     }
-    console.log("NOMBRE DEL GRUPO:", req.body.grpName)
     //Insert User in DB
     Group.findOrCreate({
         where: { name: req.body.grpName },
@@ -90,15 +89,15 @@ exports.create = (req, res, next) => {
                     plain: true,
                 })
             );
-            console.log("CONSOLE LOG DEL CREATE GROUP:",group);
             if (created) {
-                console.log("**GROUP CREATED**")
+                console.log("****GROUP CREATED****")
                 req.permisos = 1
                 next()
                 /*res.status(200).send({
                     message: "Group created.",
                 });*/
             } else {
+                console.log("****EXISTING USER****")
                 res.status(400).send({
                     message: "This Name is already registered.",
                 });
@@ -137,12 +136,13 @@ exports.update = (req, res) => {
     )
         .then((group) => {
             //result of promis
-            console.log("LOG:", group);
             if (group[0] == 0) {
+                console.log("****GROUP NOT FOUND****");
                 res.status(404).send({
                     message: `Not found Group with Name ${req.body.oldName}.`
                 });
             } else {
+                console.log("****UPDATED GROUP****");
                 res.status(200).send({
                     message: "Group update successful",
                 });
@@ -197,12 +197,14 @@ exports.delete = (req, res) => {
                 )
                     .then((groups) => {
                         //result of promis
-                        console.log("LOG:", groups);
+                        
                         if (groups == 0) {
+                            console.log("****GROUP NOT FOUND****");
                             res.status(404).send({
                                 message: `Not found Group with name ${req.body.grpName}.`
                             });
                         } else {
+                            console.log("****ELIMINATED GROUP****");
                             res.status(200).send({
                                 message: "Group delete successful",
                             });

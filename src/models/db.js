@@ -6,6 +6,7 @@ module.exports = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
     host: dbConfig.HOST,
     dialect: dbConfig.DIALECT,
     port: dbConfig.PORT,
+    logging: false,
     operatorAliases: false,
     pool: {
         max: 5,
