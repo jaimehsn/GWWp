@@ -14,9 +14,9 @@ exports.create = (req, res, next) => {
     bcrypt.hash(req.body.password, 10, (err, passHash) => {
         if (err) {
             console.log("HASH ERROR: ", err)
-            res.status(500).send({
+            /*res.status(500).send({
                 message: err.message || "Hash Error!",
-            });
+            });*/
         }
 
         //Insert User in DB
@@ -70,7 +70,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
     User.findAll({
         //SELECT name, lastname , email ...
-        attributes: ["name", "lastname", "email", "phone" , "category"],
+        attributes: ["name", "lastname", "email", "phone", "category"],
         where: {
             email: [req.params.userMail],
         },
@@ -80,7 +80,9 @@ exports.findOne = (req, res) => {
             //console.log(users);
             if (users.length == 0) {
                 console.log("****USER NOT FOUND****")
-                res.status(404).send("Non-existent user");
+                res.status(404).send({
+                    message:"User not found."
+                });
             } else {
                 console.log("****USER FOUND****")
                 res.status(200).send(users);
@@ -99,7 +101,7 @@ exports.update = (req, res) => {
     if (!req.body) {
         console.log("****BAD REQUEST****")
         res.status(400).send({
-            message: "Content can not be empty!",
+            message: "Body can not be empty.",
         });
     }
 
@@ -121,16 +123,16 @@ exports.update = (req, res) => {
     )
         .then((users) => {
             //result of promis
-            
+
             if (users[0] == 0) {
                 console.log("****USER NOT FOUND****");
                 res.status(404).send({
-                    message: `Not found User with Email ${req.params.userMail}.`
+                    message: 'User not found.'
                 });
             } else {
                 console.log("****UPDATED USER****");
                 res.status(200).send({
-                    message: "User update successful",
+                    message: "User update successful.",
                 });
             }
         })

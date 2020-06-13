@@ -21,8 +21,8 @@ exports.autentication = (req, res, next) => {
     if (token) {
         jwt.verify(token, config.SECRET, (err, decoded) => {
             if (err) {
-                return res.json({
-                    mensaje: 'Invalid token..',
+                return res.status(401).send({
+                    message: 'Invalid token.',
                 });
             } else {
                 req.decoded = decoded;
@@ -32,8 +32,8 @@ exports.autentication = (req, res, next) => {
             }
         });
     } else {
-        res.send({
-            mensaje: 'Token required.'
+        res.status(401).send({
+            message: 'Token required.'
         });
     }
 };

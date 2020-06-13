@@ -6,7 +6,7 @@ exports.create = (req, res) => {
     // Validate request
     if (Object.keys(req.body).length != 5) {
         res.status(400).send({
-            message: "Bad query!",
+            message: "Bad query.",
         })
     } else {
         // Create a Note
@@ -118,13 +118,13 @@ exports.update = (req, res) => {
             //result of promis
             if (notes[0] == 0) {
                 console.log("****NOTES NOT FOUND****")
-                res.status(200).send({
-                    message: `Not found Note with Id ${req.params.noteId}.`
+                res.status(404).send({
+                    message: `Not found Note.`
                 });
             } else {
                 console.log("****UPDATED NOTE****")
                 res.status(200).send({
-                    message: "Note update successful",
+                    message: "Note update successful.",
                 });
             }
         })

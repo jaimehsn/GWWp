@@ -33,7 +33,7 @@ exports.addToGroup = (req, res) => {
     if(!req.body.email){
         req.body.email = req.decoded.sub
     }
-    
+    console.log(req.body.email)
     User.findAll({
         //The user id is consulted
         attributes: ["id"],
@@ -45,7 +45,7 @@ exports.addToGroup = (req, res) => {
             //result of promiss
             
             if(!users){
-                console.log("****USER NOT FOUND****")
+                console.log("****USER NOT FOUND****"),
                 res.status(404).send({
                     message: "User not found.",
                 });
