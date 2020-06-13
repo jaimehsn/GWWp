@@ -20,7 +20,9 @@ exports.login = (req, res) => {
 
             //result of promis
             if (users.length == 0) {
-                res.status(404).send("Non-existent user");
+                res.status(404).send({
+                    message: "User not found"
+                });
             } else {
                 //Copare de hash password
                 bcrypt.compare(user.password, users[0].password, (err, match) => {
@@ -32,7 +34,7 @@ exports.login = (req, res) => {
                     }else{
                         if (!match) {
                             res.status(403).send({
-                                message: "Bad credentials"
+                                message: "Incorrect password"
                             })
                         } else {
                             res.status(200).send({
